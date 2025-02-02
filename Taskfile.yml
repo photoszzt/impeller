@@ -1,0 +1,35 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task --list
+
+  kafka-produce:
+    cmds:
+      - java -cp ./benchmark/lat_tp/kafka_produce_java/app/build/libs/app-uber.jar
+        kafka_produce_java.App {{.CLI_ARGS}}
+
+  kafka-consume:
+    cmds:
+      - java -cp ./benchmark/lat_tp/kafka_consume_java/app/build/libs/app-uber.jar
+        kafka_consume_java.App {{.CLI_ARGS}}
+
+  kafka-tran:
+    cmds:
+      - java -cp ./benchmark/protocol_lat_java/app/build/libs/app-uber.jar
+        protocol_lat_java.App {{.CLI_ARGS}}
+
+  install_deps:
+    cmds:
+      - which golangci-lint || { curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | 
+        sh -s -- -b $(go env GOPATH)/bin v1.55.2; }
+      - which stringer || go install golang.org/x/tools/cmd/stringer@latest
+      - which goimports || go install golang.org/x/tools/cmd/goimports@latest
+      - which msgp || go install github.com/tinylib/msgp@latest
+      - which gopls || go install golang.org/x/tools/gopls@latest
+      - which protoc-gen-go || go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
+      - which protoc-gen-go-grpc || go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
+      - which protoc-go-inject-tag || go install github.com/favadi/protoc-go-inject-tag@latest

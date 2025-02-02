@@ -1,0 +1,22 @@
+// clang-format off
+//go:generate msgp
+// clang-format on
+syntax = "proto3";
+
+option go_package = "sharedlog-stream/pkg/txn_data";
+
+import "pkg/commtypes/producer_state.proto";
+
+package txn_data;
+
+message TopicPartition {
+  string Topic = 1; // @gotags: msg:"topic,omitempty"
+  bytes ParNum = 2; // @gotags: msg:"parnum,omitempty"
+}
+
+message TxnMetaMsg {
+  string transactional_id = 1; // @gotags: msg:"txn_id,omitempty"
+  commtypes.ProdId prodId = 2; // @gotags: msg:"prodId,omitempty"
+  uint32 State = 3;            // @gotags: msg:"st,omitempty"
+  repeated TopicPartition TopicPartitions = 4; // @gotags: msg:"tps,omitempty"
+}

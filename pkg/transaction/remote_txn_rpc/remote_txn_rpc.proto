@@ -1,0 +1,57 @@
+// clang-format off
+//go:generate msgp
+// clang-format on
+syntax = "proto3";
+
+option go_package = "sharedlog-stream/pkg/transaction/remote_txn_rpc";
+
+package remote_txn_rpc;
+
+import "pkg/commtypes/producer_state.proto";
+import "pkg/txn_data/txn_meta.proto";
+import "google/protobuf/empty.proto";
+
+service RemoteTxnMngr {
+  rpc Init(InitArg) returns (InitReply) {}
+  rpc AppendTpPar(txn_data.TxnMetaMsg) returns (google.protobuf.Empty) {}
+  rpc AbortTxn(txn_data.TxnMetaMsg) returns (google.protobuf.Empty) {}
+  rpc CommitTxnAsyncComplete(txn_data.TxnMetaMsg) returns (CommitReply) {}
+  rpc CommitTxn(txn_data.TxnMetaMsg) returns (CommitReply) {}
+  rpc AppendConsumedOffset(ConsumedOffsets) returns (google.protobuf.Empty) {}
+}
+
+message ConsumedOffsets {
+  string transactionalId = 1;          // @gotags: msg:"txn_id,omitempty"
+  commtypes.ProdId prodId = 2;         // @gotags: msg:"prodId,omitempty"
+  uint32 parNum = 3;                   // @gotags: msg:"parNum,omitempty"
+  repeated OffsetPair offsetPairs = 4; // @gotags: msg:"offPairs,omitempty"
+}
+
+message CommitReply {
+  uint64 logOffset = 1; // @gotags: msg:"logOff,omitempty"
+}
+
+message StreamInfo {
+  string topicName = 1;    // @gotags: msg:"tpN,omitempty"
+  uint32 numPartition = 2; // @gotags: msg:"numPar,omitempty"
+}
+
+message InitArg {
+  string TransactionalId = 1; // @gotags: msg:"txn_id,omitempty"
+  uint32 SubstreamNum = 2;    // @gotags: msg:"substreamNum,omitempty"
+  uint32 BufMaxSize = 3;      // @gotags: msg:"bufMax,omitempty"
+  repeated StreamInfo InputStreamInfos = 4;  // @gotags: msg:"inInfo,omitempty"
+  repeated StreamInfo OutputStreamInfos = 5; // @gotags: msg:"outInfo,omitempty"
+  repeated StreamInfo KVChangelogInfos = 6;  // @gotags: msg:"kvcInfo,omitempty"
+  repeated StreamInfo WinChangelogInfos = 7; // @gotags: msg:"wcInfo,omitempty"
+}
+
+message InitReply {
+  commtypes.ProdId prodId = 1;         // @gotags: msg:"prodId,omitempty"
+  repeated OffsetPair offsetPairs = 2; // @gotags: msg:"offPairs,omitempty"
+}
+
+message OffsetPair {
+  string topicName = 1; // @gotags: msg:"tpName,omitempty"
+  uint64 offset = 2;    // @gotags: msg:"off,omitempty"
+}

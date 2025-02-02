@@ -1,0 +1,83 @@
+package {{.PackageName}}
+
+import (
+	"reflect"
+	"testing"
+	{{.ExtraImports}}
+
+	"github.com/brianvoe/gofakeit/v7"
+	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
+)
+
+func GenTestEncodeDecode{{.TypeName}}(v *{{.TypeName}}, t *testing.T, serdeG {{.CommtypesPrefix}}SerdeG[*{{.TypeName}}], serde {{.CommtypesPrefix}}Serde) {
+	vl := reflect.ValueOf(v)
+	var opts cmp.Options
+	if vl.Comparable() {
+		opts = append(opts,
+			cmpopts.EquateComparable(),
+		)
+	}
+	opts = append(opts, cmpopts.IgnoreUnexported({{.TypeName}}{}))
+
+	bts, buf, err := serdeG.Encode(v)
+	if err != nil {
+		t.Fatal(err)
+	}
+	ret, err := serdeG.Decode(bts)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !cmp.Equal(v, ret, opts...) {
+		t.Fatal("encode and decode doesn't give same value")
+	}
+	if serdeG.UsedBufferPool() {
+		*buf = bts
+		{{.CommtypesPrefix}}PushBuffer(buf)
+	}
+
+	bts, buf, err = serde.Encode(v)
+	if err != nil {
+		t.Fatal(err)
+	}
+	r, err := serde.Decode(bts)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !cmp.Equal(v, r, opts...) {
+		t.Fatal("encode and decode doesn't give same value")
+	}
+	if serde.UsedBufferPool() {
+		*buf = bts
+		{{.CommtypesPrefix}}PushBuffer(buf)
+	}
+}
+
+func TestSerde{{.TypeName}}(t *testing.T) {
+	faker := gofakeit.New(3)
+	v := &{{.TypeName}}{}
+	jsonSerdeG := {{.TypeName}}JSONSerdeG{}
+	jsonSerde := {{.TypeName}}JSONSerde{}
+	msgSerdeG := {{.TypeName}}MsgpSerdeG{}
+	msgSerde := {{.TypeName}}MsgpSerde{}
+	GenTestEncodeDecode{{.TypeName}}(v, t, jsonSerdeG, jsonSerde)
+	GenTestEncodeDecode{{.TypeName}}(v, t, msgSerdeG, msgSerde)
+
+	err := faker.Struct(v)
+	if err != nil {
+		t.Fatal(err)
+	}
+	GenTestEncodeDecode{{.TypeName}}(v, t, jsonSerdeG, jsonSerde)
+	GenTestEncodeDecode{{.TypeName}}(v, t, msgSerdeG, msgSerde)
+}
+
+func BenchmarkSerde{{.TypeName}}(b *testing.B) {
+	faker := gofakeit.New(3)
+	var v {{.TypeName}}
+	err := faker.Struct(&v)
+	if err != nil {
+		b.Fatal(err)
+	}
+	msgSerdeG := {{.TypeName}}MsgpSerdeG{}
+	{{.CommtypesPrefix}}GenBenchmarkPooledSerde(&v, b, msgSerdeG)
+}

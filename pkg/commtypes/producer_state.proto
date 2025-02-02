@@ -1,0 +1,13 @@
+// clang-format off
+//go:generate msgp
+// clang-format on
+syntax = "proto3";
+
+option go_package = "sharedlog-stream/pkg/commtypes";
+
+package commtypes;
+
+message ProdId {
+  uint64 task_id = 1;    // @gotags: msg:"tid,omitempty"
+  uint32 task_epoch = 2; // @gotags: msg:"tepo,omitempty"
+}

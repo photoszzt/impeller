@@ -1,0 +1,70 @@
+package {{.PackageName}}
+
+import (
+	"fmt"
+	"encoding/json"
+	"sharedlog-stream/pkg/common_errors"
+	{{.ExtraImports}}
+)
+
+type {{.TypeName}}JSONSerdeG struct {
+	{{.CommtypesPrefix}}DefaultJSONSerde
+}
+
+func (s {{.TypeName}}JSONSerdeG) String() string {
+	return "{{.TypeName}}JSONSerdeG"
+}
+var _ = fmt.Stringer({{.TypeName}}JSONSerdeG{})
+
+var _ = {{.CommtypesPrefix}}SerdeG[{{.TypeName}}]({{.TypeName}}JSONSerdeG{})
+
+type {{.TypeName}}MsgpSerdeG struct {
+	{{.CommtypesPrefix}}DefaultMsgpSerde
+}
+
+func (s {{.TypeName}}MsgpSerdeG) String() string {
+	return "{{.TypeName}}MsgpSerdeG"
+}
+var _ = fmt.Stringer({{.TypeName}}MsgpSerdeG{})
+
+var _ = {{.CommtypesPrefix}}SerdeG[{{.TypeName}}]({{.TypeName}}MsgpSerdeG{})
+
+
+func (s {{.TypeName}}JSONSerdeG) Encode(value {{.TypeName}}) ([]byte, *[]byte, error) {
+	r, err := json.Marshal(value)
+	return r, nil, err
+}
+
+func (s {{.TypeName}}JSONSerdeG) Decode(value []byte) ({{.TypeName}}, error) {
+	v := {{.TypeName}}{}
+	if err := json.Unmarshal(value, &v); err != nil {
+		return {{.TypeName}}{}, err
+	}
+	return v, nil
+}
+
+func (s {{.TypeName}}MsgpSerdeG) Encode(value {{.TypeName}}) ([]byte, *[]byte, error) {
+	// b := {{.CommtypesPrefix}}PopBuffer(value.Msgsize())
+	// buf := *b
+	// r, err := value.MarshalMsg(buf[:0])
+	r, err := value.MarshalMsg(nil)
+	return r, nil, err
+}
+
+func (s {{.TypeName}}MsgpSerdeG) Decode(value []byte) ({{.TypeName}}, error) {
+	v := {{.TypeName}}{}
+	if _, err := v.UnmarshalMsg(value); err != nil {
+		return {{.TypeName}}{}, err
+	}
+	return v, nil
+}
+
+func Get{{.TypeName}}SerdeG(serdeFormat {{.CommtypesPrefix}}SerdeFormat) ({{.CommtypesPrefix}}SerdeG[{{.TypeName}}], error) {
+	if serdeFormat == {{.CommtypesPrefix}}JSON {
+		return {{.TypeName}}JSONSerdeG{}, nil
+	} else if serdeFormat == {{.CommtypesPrefix}}MSGP {
+		return {{.TypeName}}MsgpSerdeG{}, nil
+	} else {
+		return nil, common_errors.ErrUnrecognizedSerdeFormat
+	}
+}
