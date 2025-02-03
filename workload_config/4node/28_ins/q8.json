@@ -1,0 +1,34 @@
+{
+    "FuncParam": [
+        {
+            "funcName": "source",
+            "NumInstance": 28,
+            "OutputTopicName": ["nexmark_src"],
+            "NodeConstraint": "1,2,3,4"
+        },
+        {
+            "funcName": "q8GroupBy",
+            "NumInstance": 28,
+            "InputTopicNames": ["nexmark_src"],
+            "OutputTopicName": ["q8_aucsBySellerID_out", "q8_personsByID_out"],
+            "NodeConstraint": "5,6,7,8",
+            "NumSrcProducer": [1]
+        },
+        {
+            "funcName": "q8JoinStream",
+            "NumInstance": 28,
+            "InputTopicNames": ["q8_aucsBySellerID_out", "q8_personsByID_out"],
+            "OutputTopicName": ["q8_out"],
+            "Final": true,
+            "NodeConstraint": "5,6,7,8",
+            "NumSrcProducer": [28, 28]
+        }
+    ],
+    "StreamParam": {
+        "nexmark_src": 28,
+        "q8_aucsBySellerID_out": 28,
+        "q8_personsByID_out": 28,
+        "q8_out": 28,
+        "changelog": 28
+    }
+}

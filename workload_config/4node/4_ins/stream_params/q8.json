@@ -1,0 +1,28 @@
+{
+    "streamParams": [
+        {
+            "tp": "nexmark_src",
+            "keySerde": "String",
+            "valSerde": "Event",
+            "numPartitions": 4
+        },
+        {
+            "tp": "q8_aucsBySellerID_out",
+            "keySerde": "Uint64",
+            "valSerde": "Event",
+            "numPartitions": 4
+        },
+        {
+            "tp": "q8_personsByID_out",
+            "keySerde": "Uint64",
+            "valSerde": "Event",
+            "numPartitions": 4
+        },
+        {
+            "tp": "q8_out",
+            "keySerde": "Uint64",
+            "valSerde": "PriceTime",
+            "numPartitions": 4
+        }
+    ]
+}

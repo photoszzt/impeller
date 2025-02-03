@@ -1,0 +1,28 @@
+{
+    "streamParams": [
+        {
+            "tp": "nexmark_src",
+            "keySerde": "String",
+            "valSerde": "Event",
+            "numPartitions": 4
+        },
+        {
+            "tp": "q3_aucsBySellerID_out",
+            "keySerde": "Uint64",
+            "valSerde": "Event",
+            "numPartitions": 4
+        },
+        {
+            "tp": "q3_personsByID_out",
+            "keySerde": "Uint64",
+            "valSerde": "Event",
+            "numPartitions": 4
+        },
+        {
+            "tp": "q3_out",
+            "keySerde": "Uint64",
+            "valSerde": "NameCityStateId",
+            "numPartitions": 4
+        }
+    ]
+}

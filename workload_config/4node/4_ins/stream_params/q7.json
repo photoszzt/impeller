@@ -1,0 +1,34 @@
+{
+    "streamParams": [
+        {
+            "tp": "nexmark_src",
+            "keySerde": "String",
+            "valSerde": "Event",
+            "numPartitions": 4
+        },
+        {
+            "tp": "bid_by_price",
+            "keySerde": "Uint64",
+            "valSerde": "Event",
+            "numPartitions": 4
+        },
+        {
+            "tp": "bid_by_win",
+            "keySerde": "StartEndTime",
+            "valSerde": "Event",
+            "numPartitions": 4
+        },
+        {
+            "tp": "max_bids",
+            "keySerde": "Uint64",
+            "valSerde": "StartEndTime",
+            "numPartitions": 4
+        },
+        {
+            "tp": "q7_out",
+            "keySerde": "Uint64",
+            "valSerde": "BidAndMax",
+            "numPartitions": 4
+        }
+    ]
+}

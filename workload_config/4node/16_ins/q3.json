@@ -1,0 +1,34 @@
+{
+    "FuncParam": [
+        {
+            "funcName": "source",
+            "NumInstance": 16,
+            "OutputTopicName": ["nexmark_src"],
+            "NodeConstraint": "1,2,3,4"
+        },
+        {
+            "funcName": "q3GroupBy",
+            "NumInstance": 16,
+            "InputTopicNames": ["nexmark_src"],
+            "OutputTopicName": ["q3_aucsBySellerID_out", "q3_personsByID_out"],
+            "NodeConstraint": "5,6,7,8",
+            "NumSrcProducer": [1]
+        },
+        {
+            "funcName": "q3JoinTable",
+            "NumInstance": 16,
+            "InputTopicNames": ["q3_aucsBySellerID_out", "q3_personsByID_out"],
+            "OutputTopicName": ["q3_out"],
+            "Final": true,
+            "NodeConstraint": "5,6,7,8",
+            "NumSrcProducer": [16, 16]
+        }
+    ],
+    "StreamParam": {
+        "nexmark_src": 16,
+        "q3_aucsBySellerID_out": 16,
+        "q3_personsByID_out": 16,
+        "q3_out": 16,
+        "changelog": 16,
+    }
+}

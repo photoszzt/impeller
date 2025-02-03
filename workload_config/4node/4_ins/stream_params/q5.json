@@ -1,0 +1,28 @@
+{
+    "streamParams": [
+        {
+            "tp": "nexmark_src",
+            "keySerde": "String",
+            "valSerde": "Event",
+            "numPartitions": 4
+        },
+        {
+            "tp": "bids",
+            "keySerde": "Uint64",
+            "valSerde": "Event",
+            "numPartitions": 4
+        },
+        {
+            "tp": "aucBids",
+            "keySerde": "StartEndTime",
+            "valSerde": "AuctionIdCount",
+            "numPartitions": 4
+        },
+        {
+            "tp": "q5_out",
+            "keySerde": "StartEndTime",
+            "valSerde": "AuctionIdCntMax",
+            "numPartitions": 4
+        }
+    ]
+}

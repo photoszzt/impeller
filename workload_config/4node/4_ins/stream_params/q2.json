@@ -1,0 +1,16 @@
+{
+    "streamParams": [
+        {
+            "tp": "nexmark_src",
+            "keySerde": "String",
+            "valSerde": "Event",
+            "numPartitions": 4
+        },
+        {
+            "tp": "q2_out",
+            "keySerde": "String",
+            "valSerde": "Event",
+            "numPartitions": 4
+        }
+    ]
+}

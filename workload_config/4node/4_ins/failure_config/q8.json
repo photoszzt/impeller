@@ -1,0 +1,9 @@
+{
+    "fail_spec": {
+        "q8JoinStream": {
+            "FailAfterS": 300,
+            "InstanceId": 0,
+            "FailTimes": 1
+        }
+    }
+}

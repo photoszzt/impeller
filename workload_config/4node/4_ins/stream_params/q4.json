@@ -1,0 +1,40 @@
+{
+    "streamParams": [
+        {
+            "tp": "nexmark_src",
+            "keySerde": "String",
+            "valSerde": "Event",
+            "numPartitions": 4
+        },
+        {
+            "tp": "q46_aucsByID",
+            "keySerde": "Uint64",
+            "valSerde": "Event",
+            "numPartitions": 4
+        },
+        {
+            "tp": "q46_bidsByAucID",
+            "keySerde": "Uint64",
+            "valSerde": "Event",
+            "numPartitions": 4
+        },
+        {
+            "tp": "q4_aucIDCat",
+            "keySerde": "AuctionIdCategory",
+            "valSerde": "AuctionBid",
+            "numPartitions": 4
+        },
+        {
+            "tp": "q4_maxBids",
+            "keySerde": "Uint64",
+            "valSerde": "ChangeUint64",
+            "numPartitions": 4
+        },
+        {
+            "tp": "q4_out",
+            "keySerde": "Uint64",
+            "valSerde": "Float64",
+            "numPartitions": 4
+        }
+    ]
+}

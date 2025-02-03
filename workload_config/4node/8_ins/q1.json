@@ -1,0 +1,23 @@
+{
+    "FuncParam": [
+        {
+            "funcName": "source",
+            "NumInstance": 8,
+            "OutputTopicName": ["nexmark_src"],
+            "NodeConstraint": "1,2,3,4"
+        },
+        {
+            "funcName": "query1",
+            "NumInstance": 8,
+            "InputTopicNames": ["nexmark_src"],
+            "OutputTopicName": ["q1_out"],
+            "NodeConstraint": "5,6,7,8",
+            "Final": true,
+            "NumSrcProducer": [1]
+        }
+    ],
+    "StreamParam": {
+        "nexmark_src": 8,
+        "q1_out": 8
+    }
+}
