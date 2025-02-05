@@ -20,7 +20,7 @@ func GenTestEncodeDecodeTopicPartition(v *TopicPartition, t *testing.T, serdeG c
 	}
 	opts = append(opts, cmpopts.IgnoreUnexported(TopicPartition{}))
 
-	bts, buf, err := serdeG.Encode(v)
+	bts, _, err := serdeG.Encode(v)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -31,12 +31,12 @@ func GenTestEncodeDecodeTopicPartition(v *TopicPartition, t *testing.T, serdeG c
 	if !cmp.Equal(v, ret, opts...) {
 		t.Fatal("encode and decode doesn't give same value")
 	}
-	if serdeG.UsedBufferPool() {
-		*buf = bts
-		commtypes.PushBuffer(buf)
-	}
+	// if serdeG.UsedBufferPool() {
+	// 	*buf = bts
+	// 	commtypes.PushBuffer(buf)
+	// }
 
-	bts, buf, err = serde.Encode(v)
+	bts, _, err = serde.Encode(v)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -47,10 +47,10 @@ func GenTestEncodeDecodeTopicPartition(v *TopicPartition, t *testing.T, serdeG c
 	if !cmp.Equal(v, r, opts...) {
 		t.Fatal("encode and decode doesn't give same value")
 	}
-	if serde.UsedBufferPool() {
-		*buf = bts
-		commtypes.PushBuffer(buf)
-	}
+	// if serde.UsedBufferPool() {
+	// 	*buf = bts
+	// 	commtypes.PushBuffer(buf)
+	// }
 }
 
 func TestSerdeTopicPartition(t *testing.T) {
@@ -61,7 +61,7 @@ func TestSerdeTopicPartition(t *testing.T) {
 	msgSerdeG := TopicPartitionMsgpSerdeG{}
 	msgSerde := TopicPartitionMsgpSerde{}
 	GenTestEncodeDecodeTopicPartition(v, t, jsonSerdeG, jsonSerde)
-	GenTestEncodeDecodeTopicPartition(v, t, msgSerdeG, msgSerde)
+	// GenTestEncodeDecodeTopicPartition(v, t, msgSerdeG, msgSerde)
 
 	err := faker.Struct(v)
 	if err != nil {

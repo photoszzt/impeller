@@ -4,6 +4,7 @@ import (
 	"sharedlog-stream/pkg/commtypes"
 	"sharedlog-stream/pkg/optional"
 	"testing"
+	"reflect"
 )
 
 func msgEncodeDecode[K, V comparable](t *testing.T, msg commtypes.MessageG[K, V],
@@ -13,7 +14,7 @@ func msgEncodeDecode[K, V comparable](t *testing.T, msg commtypes.MessageG[K, V]
 	var payloadArrSerde commtypes.SerdeG[commtypes.PayloadArr]
 	msgSerSerde = commtypes.MessageSerializedMsgpSerdeG{}
 	payloadArrSerde = commtypes.PayloadArrMsgpSerdeG{}
-	bytes, b, err := msgSerde.Encode(msg)
+	bytes, _, err := msgSerde.Encode(msg)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -41,13 +42,13 @@ func msgEncodeDecode[K, V comparable](t *testing.T, msg commtypes.MessageG[K, V]
 	ret_val := ret_msg.Value.Unwrap()
 	key := msg.Key.Unwrap()
 	val := msg.Value.Unwrap()
-	if ret_key != key || ret_val != val {
+	if !reflect.DeepEqual(ret_key, key) || !reflect.DeepEqual(ret_val, val) {
 		t.Fatalf("expected: %v, got %v\n", msg, ret_msg)
 	}
 	*b_payload = payloads
 	commtypes.PushBuffer(b_payload)
-	*b = bytes
-	commtypes.PushBuffer(b)
+	// *b = bytes
+	// commtypes.PushBuffer(b)
 }
 
 func TestQ4MaxMsgSerde(t *testing.T) {

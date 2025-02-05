@@ -20,7 +20,7 @@ func GenTestEncodeDecodeRTxnReply(v *RTxnReply, t *testing.T, serdeG commtypes.S
 	}
 	opts = append(opts, cmpopts.IgnoreUnexported(RTxnReply{}))
 
-	bts, buf, err := serdeG.Encode(v)
+	bts, _, err := serdeG.Encode(v)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -31,12 +31,12 @@ func GenTestEncodeDecodeRTxnReply(v *RTxnReply, t *testing.T, serdeG commtypes.S
 	if !cmp.Equal(v, ret, opts...) {
 		t.Fatal("encode and decode doesn't give same value")
 	}
-	if serdeG.UsedBufferPool() {
-		*buf = bts
-		commtypes.PushBuffer(buf)
-	}
+	// if serdeG.UsedBufferPool() {
+	// 	*buf = bts
+	// 	commtypes.PushBuffer(buf)
+	// }
 
-	bts, buf, err = serde.Encode(v)
+	bts, _, err = serde.Encode(v)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -47,10 +47,10 @@ func GenTestEncodeDecodeRTxnReply(v *RTxnReply, t *testing.T, serdeG commtypes.S
 	if !cmp.Equal(v, r, opts...) {
 		t.Fatal("encode and decode doesn't give same value")
 	}
-	if serde.UsedBufferPool() {
-		*buf = bts
-		commtypes.PushBuffer(buf)
-	}
+	// if serde.UsedBufferPool() {
+	// 	*buf = bts
+	// 	commtypes.PushBuffer(buf)
+	// }
 }
 
 func TestSerdeRTxnReply(t *testing.T) {
