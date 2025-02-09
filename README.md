@@ -1,6 +1,10 @@
 # Impeller
 Impeller is a research stream processing system on a shared log. Impeller uses Boki as the underlying shared log.
 
+## Structure of this repository ##
+* `pkg`: Impeller protocol implementation
+* `benchmark`: Nexmark benchmark and micro-benchmark
+
 ## Paper
 ```bib
 Impeller: Stream Processing on Shared Logs 
